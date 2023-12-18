@@ -1,12 +1,38 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * TODO Sprint add-controllers.
- */
+import javax.validation.Valid;
+import java.util.List;
+
+
 @RestController
 @RequestMapping("/items")
 public class ItemController {
+//    ItemService itemService;
+//
+//    @Autowired
+//    public ItemController(ItemService itemService) {
+//        this.itemService = itemService;
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ItemDto get(@PathVariable Long id) {
+//        return itemService.get(id);
+//    }
+//    @PostMapping
+//    public ItemDto create(@RequestHeader("X-Later-User-Id") Long userId,
+//                    @RequestBody ItemDto item) {
+//        return itemService.add(userId, item);
+//    }
+//    @PatchMapping("/{id}")
+//    public ItemDto update(@PathVariable Long id, @Valid @RequestBody ItemDto item) {
+//        return itemService.update(id, item);
+//    }
+//
+//    @GetMapping
+//    public List<ItemDto> getAll() {
+//        return itemService.getAll();
+//    }
 }
