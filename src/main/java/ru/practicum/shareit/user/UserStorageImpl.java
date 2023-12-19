@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.HttpClientErrorException;
+import ru.practicum.shareit.exception.EmailErrorAlreadyExists;
+import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.exception.ValidationExceptionUser;
 
 import javax.validation.ValidationException;
@@ -28,17 +30,17 @@ public class UserStorageImpl implements UserStorage {
             log.info("Get user id {}", id);
             return UserMapper.toUserDto(storage.get(id));
         }
-        throw new RuntimeException("Пользователь не найден");
+        throw new UserNotFoundException("Пользователь не найден");
     }
 
     @Override
     public UserDto create(UserDto user){
         if (user.getEmail() == null){
-            throw new ValidationExceptionUser("MAIL");
+            throw new ValidationExceptionUser("Отсутствует email");
         }
         for (User userValue : storage.values()) {
             if (userValue.getEmail().equals(user.getEmail())){
-               throw new NullPointerException("такой email уже существует");
+               throw new EmailErrorAlreadyExists("такой email уже существует");
             }
         }
             user.setId(++generatedId);
@@ -51,7 +53,7 @@ public class UserStorageImpl implements UserStorage {
     public UserDto update(Long id, UserDto user) {
         for (User userValue : storage.values()) {
             if (userValue.getEmail().equals(user.getEmail()) && !userValue.getId().equals(id)){
-                throw new NullPointerException("такой email уже существует");
+                throw new EmailErrorAlreadyExists("такой email уже существует");
             }
         }
         if (storage.containsKey(id)){
@@ -66,7 +68,7 @@ public class UserStorageImpl implements UserStorage {
             storage.put(id, userOld);
             return UserMapper.toUserDto(userOld);
         }
-        throw new RuntimeException("Пользователь не найден");
+        throw new UserNotFoundException("Пользователь не найден");
     }
 
     @Override
@@ -81,7 +83,7 @@ public class UserStorageImpl implements UserStorage {
             storage.remove(id);
         }
         else {
-            throw new RuntimeException("Пользователь не найден");
+            throw new UserNotFoundException("Пользователь не найден");
         }
     }
 }

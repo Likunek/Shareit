@@ -12,21 +12,21 @@ import java.util.Map;
 @RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler({ValidationExceptionUser.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST) //400
     public Map<String, String> validationError(final RuntimeException e) {
         return Map.of("error", "ошибка валидации",
                 "errorMessage", e.getMessage());
     }
 
-//    @ExceptionHandler({FilmNotFoundException.class, UserNotFoundException.class})
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public Map<String, String> objectNotFound(final RuntimeException e) {
-//        return Map.of("error", "объект не найден",
-//                "errorMessage", e.getMessage());
-//    }
-//
+    @ExceptionHandler({UserNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> objectNotFound(final RuntimeException e) {
+        return Map.of("error", "объект не найден",
+                "errorMessage", e.getMessage());
+    }
+
 //    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) //500
 //    public Map<String, String> getException(final Throwable e) {
 //        return Map.of("error", "Произошла непредвиденная ошибка.",
 //                "errorMessage", e.getMessage());

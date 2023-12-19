@@ -9,7 +9,6 @@ import javax.validation.constraints.Past;
 import java.time.LocalDate;
 @Data
 public class Booking {
-    @NotNull
     private Long id;
     @Past(message = "wrong start date")
     private LocalDate start;
