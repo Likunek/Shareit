@@ -21,18 +21,20 @@ public class ItemController {
     public ItemDto get(@PathVariable Long itemId) {
         return itemService.get(itemId);
     }
+
     @PostMapping
-    public ItemDto create(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long userId,
-                    @RequestBody ItemDto item) {
+    public ItemDto create(@RequestHeader("X-Sharer-User-Id") Long userId,
+                          @Valid @RequestBody ItemDto item) {
         return itemService.add(item, userId);
     }
+
     @PatchMapping("/{itemId}")
-    public ItemDto update(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long userId, @PathVariable Long itemId, @Valid @RequestBody ItemDto item) {
+    public ItemDtoUpdate update(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId, @Valid @RequestBody ItemDtoUpdate item) {
         return itemService.update(item, userId, itemId);
     }
 
     @GetMapping
-    public List<ItemDto> getAll(@RequestHeader(value = "X-Sharer-User-Id", required = false) Long userId) {
+    public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemService.getAll(userId);
     }
 

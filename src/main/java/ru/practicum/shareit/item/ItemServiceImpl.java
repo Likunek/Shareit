@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
-import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.UserStorage;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto update(ItemDto itemDto, Long userId, Long itemId) {
+    public ItemDtoUpdate update(ItemDtoUpdate itemDto, Long userId, Long itemId) {
         if (userStorage.get(userId) != null) {
             if (get(itemId) != null) {
                 return itemStorage.update(itemDto, userId, itemId);

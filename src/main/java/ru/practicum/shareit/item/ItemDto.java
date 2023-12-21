@@ -12,10 +12,12 @@ import javax.validation.constraints.NotNull;
 public class ItemDto {
 
     private Long id;
+    @NotNull
+    @NotBlank(message = "name cannot be empty")
     private String name;
+    @NotNull
     private String description;
-
+    @NotNull
     private Boolean available;
-
     private ItemRequest request;
 }

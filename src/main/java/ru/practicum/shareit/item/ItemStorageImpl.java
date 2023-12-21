@@ -1,16 +1,15 @@
 package ru.practicum.shareit.item;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
-import ru.practicum.shareit.user.User;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class ItemStorageImpl implements ItemStorage {
 
     private final Map<Long, List<Item>> items = new HashMap<>();
@@ -21,6 +20,7 @@ public class ItemStorageImpl implements ItemStorage {
        for ( List<Item> item : items.values()) {
          List<Item> itemList = item.stream().filter(x -> x.getId().equals(itemId)).collect(Collectors.toList());
            if (itemList.size() > 0){
+               log.info("Get item {}", itemList.get(0));
                return itemList.stream().map(ItemMapper :: toItemDto).collect(Collectors.toList()).get(0);
            }
        } throw new ItemNotFoundException("Вещь не найдена");
@@ -35,15 +35,17 @@ public class ItemStorageImpl implements ItemStorage {
                 userItems = new ArrayList<>();
             }
             userItems.add(item);
+            log.info("Add item {}", item);
             return userItems;
         });
         return itemDto;
     }
 
     @Override
-    public ItemDto update(ItemDto itemDto, Long userId, Long itemId) {
+    public ItemDtoUpdate update(ItemDtoUpdate itemDto, Long userId, Long itemId) {
         if(items.containsKey(userId)) {
-            Item item = items.get(userId).stream().filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
+            Item item = items.get(userId)
+                    .stream().filter(x -> x.getId().equals(itemId)).collect(Collectors.toList()).get(0);
             if (item == null){
                 throw new UserNotFoundException("Вы не являетесь владельцем данной вещи");
             }
@@ -61,14 +63,16 @@ public class ItemStorageImpl implements ItemStorage {
                 item.setRequest(itemDto.getRequest());
             }
             items.get(userId).add(item);
-            return ItemMapper.toItemDto(item);
+            log.info("Update item {}", item);
+            return ItemMapper.toItemDtoUpdate(item);
         }
        throw new UserNotFoundException("Пользователь не найден");
     }
 
     @Override
     public List<ItemDto> getAll(Long userId) {
-        return items.getOrDefault(userId, Collections.emptyList()).stream().map(ItemMapper :: toItemDto).collect(Collectors.toList());
+        return items.getOrDefault(userId, Collections.emptyList())
+                .stream().map(ItemMapper :: toItemDto).collect(Collectors.toList());
     }
 
 
@@ -83,15 +87,27 @@ public class ItemStorageImpl implements ItemStorage {
         } else {
            throw new UserNotFoundException("Вы не являетесь владельцем какой-либо вещи");
         }
+        log.info("Delete item id {}", itemId);
     }
     @Override
         public List<ItemDto> search(String text) {
-        for ( List<Item> item : items.values()) {
-            item.stream().map(x -> x.getName().contains(text)).collect(Collectors.toList());
-            if (item.size() != 0){
-                return item.stream().map(ItemMapper :: toItemDto).collect(Collectors.toList());
+        List<Item> itemsFilter;
+        List<Item> itemsSearch = new ArrayList<>();
+        if (!text.isBlank()) {
+            for (List<Item> item : items.values()) {
+                itemsFilter = item.stream()
+                        .filter(x -> (x.getName().toLowerCase().contains(text) ||
+                        x.getDescription().toLowerCase().contains(text)))
+                        .filter(x -> x.getAvailable().equals(true)).collect(Collectors.toList());
+                if (itemsFilter.size() != 0) {
+                    for (Item itemFilter : itemsFilter) {
+                        itemsSearch.add(itemFilter);
+                    }
+                }
             }
-        } throw new ItemNotFoundException("Вещь не найдена");
+        }
+            log.info("Search items {}", itemsSearch);
+            return itemsSearch.stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 
 

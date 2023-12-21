@@ -1,8 +1,5 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.web.client.HttpClientErrorException;
-import ru.practicum.shareit.user.User;
-
 import java.util.List;
 
 public interface ItemStorage {
@@ -10,7 +7,7 @@ public interface ItemStorage {
 
     public ItemDto add(ItemDto itemDto, Long userId);
 
-    public ItemDto update(ItemDto itemDto, Long userId, Long itemId);
+    public ItemDtoUpdate update(ItemDtoUpdate itemDto, Long userId, Long itemId);
 
     public List<ItemDto> getAll(Long userId);
 
