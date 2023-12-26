@@ -11,8 +11,8 @@ import java.util.List;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-     UserStorage userStorage;
-     ItemStorage itemStorage;
+    UserStorage userStorage;
+    ItemStorage itemStorage;
 
     @Autowired
     public ItemServiceImpl(UserStorage userStorage, ItemStorage itemStorage) {
@@ -22,7 +22,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto get(Long itemId) {
-       return itemStorage.get(itemId);
+        return itemStorage.get(itemId);
     }
 
     @Override

@@ -1,16 +1,10 @@
 package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.client.HttpClientErrorException;
 import ru.practicum.shareit.exception.EmailErrorAlreadyExists;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.exception.ValidationExceptionUser;
-
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +20,7 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public UserDto get(Long id) {
-        if (storage.containsKey(id)){
+        if (storage.containsKey(id)) {
             log.info("Get user id {}", id);
             return UserMapper.toUserDto(storage.get(id));
         }
@@ -34,29 +28,29 @@ public class UserStorageImpl implements UserStorage {
     }
 
     @Override
-    public UserDto create(UserDto user){
-        if (user.getEmail() == null){
+    public UserDto create(UserDto user) {
+        if (user.getEmail() == null) {
             throw new ValidationExceptionUser("Отсутствует email");
         }
         for (User userValue : storage.values()) {
-            if (userValue.getEmail().equals(user.getEmail())){
-               throw new EmailErrorAlreadyExists("такой email уже существует");
+            if (userValue.getEmail().equals(user.getEmail())) {
+                throw new EmailErrorAlreadyExists("такой email уже существует");
             }
         }
-            user.setId(++generatedId);
-            log.info("Creating user {}", user);
-            storage.put(user.getId(), UserMapper.toUser(user));
-            return user;
+        user.setId(++generatedId);
+        log.info("Creating user {}", user);
+        storage.put(user.getId(), UserMapper.toUser(user));
+        return user;
     }
 
     @Override
     public UserDto update(Long id, UserDto user) {
         for (User userValue : storage.values()) {
-            if (userValue.getEmail().equals(user.getEmail()) && !userValue.getId().equals(id)){
+            if (userValue.getEmail().equals(user.getEmail()) && !userValue.getId().equals(id)) {
                 throw new EmailErrorAlreadyExists("такой email уже существует");
             }
         }
-        if (storage.containsKey(id)){
+        if (storage.containsKey(id)) {
             User userOld = storage.get(id);
             if (user.getEmail() != null) {
                 userOld.setEmail(user.getEmail());
@@ -78,11 +72,10 @@ public class UserStorageImpl implements UserStorage {
 
     @Override
     public void delete(Long id) {
-        if (storage.containsKey(id)){
+        if (storage.containsKey(id)) {
             log.info("Delete user with id {}", id);
             storage.remove(id);
-        }
-        else {
+        } else {
             throw new UserNotFoundException("Пользователь не найден");
         }
     }

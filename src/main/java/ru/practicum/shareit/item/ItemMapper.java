@@ -13,14 +13,14 @@ public class ItemMapper {
 
     public static Item toItem(ItemDto item, Long user) {
 
-            return Item.builder()
-                    .id(item.getId())
-                    .name(item.getName())
-                    .description(item.getDescription())
-                    .available( item.getAvailable())
-                    .request(item.getRequest())
-                    .ownerId(user)
-                    .build();
+        return Item.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .request(item.getRequest())
+                .ownerId(user)
+                .build();
 
     }
 
@@ -40,7 +40,7 @@ public class ItemMapper {
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
-                .available( item.getAvailable())
+                .available(item.getAvailable())
                 .request(item.getRequest())
                 .ownerId(user)
                 .build();

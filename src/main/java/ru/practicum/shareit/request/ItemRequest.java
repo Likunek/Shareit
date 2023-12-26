@@ -5,7 +5,7 @@ import lombok.Data;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
 
@@ -17,6 +17,6 @@ public class ItemRequest {
     private String description;
     @NotNull
     private User requestors;
-    @Past(message = "wrong created date")
+    @PastOrPresent(message = "wrong created date")
     private LocalDate created;
 }
