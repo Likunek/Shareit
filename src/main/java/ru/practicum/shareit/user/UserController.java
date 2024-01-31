@@ -20,27 +20,27 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDto get(@PathVariable Long id) {
-        return userService.get(id);
+        return userService.getUser(id);
     }
 
     @PostMapping
     public UserDto create(@Valid @RequestBody UserDto user) {
-        return userService.create(user);
+        return userService.saveUser(user);
     }
 
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable Long id, @Valid @RequestBody UserDto user) {
-        return userService.update(id, user);
+        return userService.updateUser(id, user);
     }
 
     @GetMapping
     public List<UserDto> getAll() {
-        return userService.getAll();
+        return userService.getAllUsers();
     }
 
     @DeleteMapping("/{id}")
     public void deleteFriend(@PathVariable Long id) {
-        userService.delete(id);
+        userService.deleteUser(id);
     }
 
 }

@@ -1,53 +1,22 @@
 package ru.practicum.shareit.booking;
 
+import org.springframework.transaction.annotation.Transactional;
 
-import ru.practicum.shareit.exception.UserNotFoundException;
-import ru.practicum.shareit.item.ItemStorage;
-import ru.practicum.shareit.user.UserStorage;
+import java.util.List;
 
-public class BookingService {
+public interface BookingService {
 
-    UserStorage userStorage;
-    BookingStorage bookingStorage;
-    ItemStorage itemStorage;
+    @Transactional
+    Booking createBooking(BookingDto bookingDto, Long userId);
 
-    public BookingService(UserStorage userStorage, BookingStorage bookingStorage, ItemStorage itemStorage) {
-        this.userStorage = userStorage;
-        this.bookingStorage = bookingStorage;
-        this.itemStorage = itemStorage;
-    }
+    @Transactional
+    Booking getBooking(Long bookingId, Long userId);
 
+    public Booking confirmTheBooking(Long idUser, Long idBooking, boolean confirm);
 
-    public Booking createBooking(Booking booking) {
-        return bookingStorage.createBooking(booking);
-    }
+    @Transactional
+    List<Booking> getAllBookingByUser(Long userId, Status state);
 
+    List<Booking> getAllBookingItemsByOwner(Long userId, Status state);
 
-    public Booking getBooking(Long idBooking) {
-        return bookingStorage.getBooking(idBooking);
-    }
-
-
-    public void confirmTheBookingByTheOwner(Long idUser, Long idBooking, boolean confirm) {
-        if (userStorage.get(idUser) != null) {
-            bookingStorage.confirmTheBookingByTheOwner(idUser, idBooking, confirm);
-        }
-        throw new UserNotFoundException("Пользователь не найден");
-    }
-
-
-    public void cancelTheBookingByTheСlient(Long idUser, Long idBooking) {
-        if (userStorage.get(idUser) != null) {
-            bookingStorage.cancelTheBookingByTheСlient(idUser, idBooking);
-        }
-        throw new UserNotFoundException("Пользователь не найден");
-    }
-
-
-    public void addReview(Long idUser, Long idBooking, String review) {
-        if (userStorage.get(idUser) != null) {
-            bookingStorage.addReview(idUser, idBooking, review);
-        }
-        throw new UserNotFoundException("Пользователь не найден");
-    }
 }

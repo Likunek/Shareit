@@ -60,9 +60,9 @@ public class ItemStorageImpl implements ItemStorage {
             if (itemDto.getDescription() != null) {
                 item.setDescription(itemDto.getDescription());
             }
-            if (itemDto.getRequest() != null) {
-                item.setRequest(itemDto.getRequest());
-            }
+//            if (itemDto.getRequest() != null) {
+//                item.setRequest(itemDto.getRequest());
+//            }
             items.get(userId).add(item);
             log.info("Update item {}", item);
             return ItemMapper.toItemDtoUpdate(item);
