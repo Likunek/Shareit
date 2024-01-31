@@ -1,12 +1,8 @@
 package ru.practicum.shareit.item;
 
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import ru.practicum.shareit.booking.Booking;
-import ru.practicum.shareit.request.ItemRequest;
 
 
 import javax.persistence.*;

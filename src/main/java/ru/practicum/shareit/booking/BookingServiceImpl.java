@@ -12,19 +12,17 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-import static jdk.nashorn.internal.objects.Global.undefined;
 import static ru.practicum.shareit.booking.Status.REJECTED;
 import static ru.practicum.shareit.booking.Status.WAITING;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BookingServiceImpl implements  BookingService {
+public class BookingServiceImpl implements BookingService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
@@ -45,6 +43,7 @@ public class BookingServiceImpl implements  BookingService {
         }
         throw new TheItemHasAlreadyBeenBooked("You can't book this thing");
     }
+
     @Override
     public Booking getBooking(Long bookingId, Long userId) {
         User user = userRepository.findById(userId)
@@ -75,7 +74,7 @@ public class BookingServiceImpl implements  BookingService {
                     throw new TheItemHasAlreadyBeenBooked("The status has already been confirmed");
                 }
             } else {
-                if (!booking.getStatus().equals(REJECTED)){
+                if (!booking.getStatus().equals(REJECTED)) {
                     booking.setStatus(REJECTED);
                 } else {
                     throw new TheItemHasAlreadyBeenBooked("The status has already been confirmed");
@@ -90,10 +89,6 @@ public class BookingServiceImpl implements  BookingService {
     public List<Booking> getAllBookingByUser(Long userId, Status state) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-//        String dateOfNote = DateTimeFormatter
-//                .ofPattern("yyyy.MM.dd hh:mm:ss")
-//                .withZone(ZoneOffset.UTC)
-//                .format(Instant.now());
         ZoneId zone = ZoneId.of("UTC+7");
         LocalDateTime date = LocalDateTime.ofInstant(Instant.now(), zone);
         switch (state) {
@@ -110,7 +105,8 @@ public class BookingServiceImpl implements  BookingService {
                 return bookingRepository.findBookingWaiting(userId, WAITING.name());
             case REJECTED:
                 return bookingRepository.findBookingRejected(userId, REJECTED.name());
-            default: throw new RuntimeException("the request was not found");
+            default:
+                throw new RuntimeException("the request was not found");
         }
     }
 
@@ -118,10 +114,6 @@ public class BookingServiceImpl implements  BookingService {
     public List<Booking> getAllBookingItemsByOwner(Long userId, Status state) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-//        String dateOfNote = DateTimeFormatter
-//                .ofPattern("yyyy.MM.dd hh:mm:ss")
-//                .withZone(ZoneOffset.UTC)
-//                .format(Instant.now());
         ZoneId zone = ZoneId.of("UTC+7");
         LocalDateTime date = LocalDateTime.ofInstant(Instant.now(), zone);
         switch (state) {
@@ -137,7 +129,8 @@ public class BookingServiceImpl implements  BookingService {
                 return bookingRepository.findBookingWaitingItemsByOwner(userId, WAITING.name());
             case REJECTED:
                 return bookingRepository.findBookingRejectedItemsByOwner(userId, REJECTED.name());
-            default: throw new RuntimeException("the request was not found");
+            default:
+                throw new RuntimeException("the request was not found");
         }
     }
 

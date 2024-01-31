@@ -12,8 +12,9 @@ public class UserMapper {
                 .email(user.getEmail())
                 .build();
     }
+
     public static User toUser(UserDto userDto) {
-       User user = new User();
+        User user = new User();
         if (userDto.getName() != null && userDto.getEmail() != null) {
             user.setName(userDto.getName());
             user.setEmail(userDto.getEmail());

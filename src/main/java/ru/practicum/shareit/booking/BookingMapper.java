@@ -16,7 +16,7 @@ public class BookingMapper {
     }
 
     static public BookingByBooker toBookingByBooker(Booking booking) {
-       return BookingByBooker
+        return BookingByBooker
                 .builder()
                 .id(booking.getId())
                 .bookerId(booking.getBooker().getId())

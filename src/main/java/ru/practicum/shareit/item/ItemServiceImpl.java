@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.Status;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.exception.TheItemHasAlreadyBeenBooked;
 import ru.practicum.shareit.exception.UserNotFoundException;
@@ -99,7 +98,7 @@ class ItemServiceImpl implements ItemService {
             if (bookingsPast.size() != 0) {
                 itemDto.setLastBooking(BookingMapper.toBookingByBooker(bookingsPast.get(0)));
             }
-            if ( bookingsFuture.size() != 0) {
+            if (bookingsFuture.size() != 0) {
                 if (!bookingsFuture.get(0).getStatus().equals(REJECTED)) {
                     itemDto.setNextBooking(BookingMapper.toBookingByBooker(bookingsFuture.get(0)));
                 }
@@ -119,6 +118,7 @@ class ItemServiceImpl implements ItemService {
         }
         return new ArrayList<>();
     }
+
     @Override
     public Comment addComment(Long userId, Long itemId, Comment comment) {
         User user = userRepository.findById(userId)

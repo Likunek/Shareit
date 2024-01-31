@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.ItemNotFoundException;
@@ -28,7 +27,7 @@ public class ItemController {
     @PostMapping
     public ItemDto create(@RequestHeader("X-Sharer-User-Id") Long userId,
                           @Valid @RequestBody ItemDto item) {
-        if (userId !=null) {
+        if (userId != null) {
             return itemService.addNewItem(userId, item);
         }
         throw new UserNotFoundException("User not found");
@@ -37,7 +36,7 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemDto update(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId,
                           @Valid @RequestBody ItemDtoUpdate item) {
-        if (userId !=null) {
+        if (userId != null) {
             return itemService.updateItem(itemId, userId, item);
         }
         throw new UserNotFoundException("User not found");
@@ -45,7 +44,7 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        if (userId !=null) {
+        if (userId != null) {
             return itemService.getUserItems(userId);
         }
         throw new UserNotFoundException("User not found");
@@ -55,13 +54,14 @@ public class ItemController {
     public List<ItemInfo> getItemByQueryField(@RequestParam(name = "text") String queryField) {
         return itemService.search(queryField.toLowerCase());
     }
+
     @PostMapping("/{itemId}/comment")
     public Comment getComment(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long itemId, @Valid @RequestBody Comment comment) {
-        if (userId !=null) {
+        if (userId != null) {
             if (itemId != null) {
                 return itemService.addComment(userId, itemId, comment);
             }
-           throw new ItemNotFoundException("Item not found");
+            throw new ItemNotFoundException("Item not found");
         }
         throw new UserNotFoundException("User not found");
     }
