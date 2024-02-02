@@ -1,7 +1,7 @@
-DROP TABLE users CASCADE;
-DROP TABLE items CASCADE;
-DROP TABLE booking CASCADE;
-DROP TABLE comments CASCADE;
+--DROP TABLE users CASCADE;
+--DROP TABLE items CASCADE;
+--DROP TABLE booking CASCADE;
+--DROP TABLE comments CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -29,8 +29,8 @@ CONSTRAINT AK_id UNIQUE(id, user_id)
 );
 CREATE TABLE IF NOT EXISTS booking (
 id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-start_time timestamp with time zone,
-end_time timestamp with time zone,
+start_time TIMESTAMP WITHOUT TIME ZONE,
+end_time timestamp WITHOUT time zone,
 item_id BIGINT REFERENCES items(id),
 user_id BIGINT REFERENCES users(id),
 status varchar(100),
@@ -43,5 +43,5 @@ text varchar(300),
 author_name varchar(50),
 item_id BIGINT REFERENCES items(id),
 user_id BIGINT REFERENCES users(id),
-created timestamp with time zone
+created timestamp WITHOUT time zone
 );

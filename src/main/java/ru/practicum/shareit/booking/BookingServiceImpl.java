@@ -14,6 +14,7 @@ import ru.practicum.shareit.user.UserRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static ru.practicum.shareit.booking.Status.REJECTED;
@@ -89,8 +90,8 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getAllBookingByUser(Long userId, Status state) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        ZoneId zone = ZoneId.of("UTC+7");
-        LocalDateTime date = LocalDateTime.ofInstant(Instant.now(), zone);
+        LocalDateTime date = LocalDateTime.now();
+        log.info("Время: {}", date);
         switch (state) {
             case ALL:
                 return bookingRepository.findByBookerId(userId);
@@ -114,8 +115,8 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> getAllBookingItemsByOwner(Long userId, Status state) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        ZoneId zone = ZoneId.of("UTC+7");
-        LocalDateTime date = LocalDateTime.ofInstant(Instant.now(), zone);
+        LocalDateTime date = LocalDateTime.now();
+        log.info("Время: {}", date);
         switch (state) {
             case ALL:
                 return bookingRepository.findBookingItemsByOwner(userId);

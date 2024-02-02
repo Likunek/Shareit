@@ -16,6 +16,7 @@ import ru.practicum.shareit.user.UserRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,8 +92,8 @@ class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException("Item not found"));
         ItemDto itemDto = ItemMapper.toItemDto(item);
         if (item.getUserId().equals(userId)) {
-            ZoneId zone = ZoneId.of("UTC+7");
-            LocalDateTime date = LocalDateTime.ofInstant(Instant.now(), zone);
+            LocalDateTime date = LocalDateTime.now();
+            log.info("Время: {}", date);
             List<Booking> bookingsPast = bookingRepository.findByItemIdPast(id, date, REJECTED);
             List<Booking> bookingsFuture = bookingRepository.findByItemIdFuture(id, date, REJECTED);
             if (bookingsPast.size() != 0) {
@@ -124,8 +125,7 @@ class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException("Item not found"));
-        ZoneId zone = ZoneId.of("UTC+7");
-        LocalDateTime date = LocalDateTime.ofInstant(Instant.now(), zone);
+        LocalDateTime date = LocalDateTime.now();
         List<Booking> bookings = bookingRepository.findBookingPastItemsByOwner(item.getUserId(), date);
         for (Booking booking : bookings) {
             if (booking.getBooker().getId().equals(userId)) {
