@@ -1,11 +1,16 @@
 package ru.practicum.shareit.booking;
 
+import org.assertj.core.internal.bytebuddy.TypeCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.exception.ExceptionEnum;
 import ru.practicum.shareit.exception.UserNotFoundException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import java.awt.print.Pageable;
 import java.util.List;
 
 /**
@@ -51,10 +56,13 @@ public class BookingController {
 
     @GetMapping
     public List<Booking> getAllBookingByUser(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                             @RequestParam(name = "state", defaultValue = "ALL") String state) {
+                                             @RequestParam(name = "state", defaultValue = "ALL") String state, @PositiveOrZero  @RequestParam(name = "from", defaultValue = "0") Integer from,
+                                             @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         if (userId != null) {
             try {
                 Status stateNew = Status.valueOf(state.toUpperCase());
+                Sort sort = Sort.by(Sort.Direction.DESC, "start_time");
+                final Pageable pageable = new Pageable(from/size, size, sort);
                 return bookingService.getAllBookingByUser(userId, stateNew);
             } catch (RuntimeException e) {
                 throw new ExceptionEnum("Unknown state: " + state);
